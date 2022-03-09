@@ -3,13 +3,15 @@ namespace DevJobsAPI.Controllers
 
     using Microsoft.AspNetCore.Mvc;
 
-    [Route("api/[controller]")]
+    [Route("api/job-vacancy ")]
     [ApiController]
     public class JobVacancyController : ControllerBase
     {
+        //api/job-vacancy 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public Task<IActionResult> Get()
         {
+            
             
             return Ok();
         }
