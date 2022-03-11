@@ -4,6 +4,7 @@ namespace DevJobsAPI.Controllers
     using Microsoft.AspNetCore.Mvc;
     using DevJobsAPI.Persistense;
     using DevJobsAPI.entities;
+    using Microsoft.EntityFrameworkCore;
 
     [Route("api/job-vacancy ")]
     [ApiController]
@@ -26,12 +27,13 @@ namespace DevJobsAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id){
             var jobvacancy = _context.JobVacancies
+            .Include(jv => jv.Applications)
             .SingleOrDefault(jv => jv.Id == id);
 
             if(jobvacancy == null){
                 return NotFound();
             }
-            return Ok();
+            return Ok(jobvacancy);
         }
 
         //POST api/job-vacancy
@@ -46,6 +48,8 @@ namespace DevJobsAPI.Controllers
 
             );
             _context.JobVacancies.Add(jobvacancy);
+            _context.SaveChanges();
+
             return CreatedAtAction("GetById", new {id = jobvacancy.Id}, jobvacancy);
         }
 
@@ -59,6 +63,8 @@ namespace DevJobsAPI.Controllers
                 return NotFound();
             }
             jobvacancy.Update(model.Title, model.Description);
+            _context.SaveChanges();
+
             return NoContent();
         }
     }
